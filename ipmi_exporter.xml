@@ -2,23 +2,39 @@
 <!DOCTYPE service_bundle SYSTEM '/usr/share/lib/xml/dtd/service_bundle.dtd.1'>
 <service_bundle type='manifest' name='export'>
   <service name='ipmi-exporter' type='service' version='0'>
+
     <create_default_instance enabled='true'/>
     <single_instance/>
+
     <dependency name='network' grouping='require_all' restart_on='error' type='service'>
       <service_fmri value='svc:/milestone/network:default'/>
     </dependency>
+
     <dependency name='filesystem' grouping='require_all' restart_on='error' type='service'>
       <service_fmri value='svc:/system/filesystem/local'/>
     </dependency>
 
-    <exec_method name='start' type='method' exec='/opt/custom/smf/bin/ipmi_exporter &amp;' timeout_seconds='30'/>
+    <exec_method name='start' type='method' exec='/opt/custom/smf/bin/ipmi_exporter -listen-address ${server/listen} -ipmi-target ${ipmi/target} -ipmi-user ${ipmi/user} -ipmi-passwd ${ipmi/passwd} &amp;' timeout_seconds='30'/>
     <exec_method name='restart' type='method' exec=':kill' timeout_seconds='60'/>
     <exec_method name='stop' type='method' exec=':kill' timeout_seconds='60'/>
     <exec_method name='refresh' type='method' exec=':kill -HUP' timeout_seconds='60'/>
+
     <property_group name='application' type='application'/>
+
     <property_group name='startd' type='framework'>
       <propval name='ignore_error' type='astring' value='core,signal'/>
     </property_group>
+
+    <property_group name='server' type='service'>
+      <propval name='listen' type='astring' value=':9100'/>
+    </property_group>
+
+    <property_group name='ipmi' type='service'>
+      <propval name='target' type='astring' value=''/>
+      <propval name='user' type='astring' value='admin'/>
+      <propval name='passwd' type='astring' value=''/>
+    </property_group>
+
     <stability value='Stable'/>
     <template>
       <common_name>
