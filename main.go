@@ -25,11 +25,11 @@ func init() {
 
 // program starter
 func main() {
-	log.Infoln("Starting ipmi_exporter", version.Info())
-
 	if err := envflag.Parse(); err != nil {
 		panic(err)
 	}
+
+	log.Infoln("Starting ipmi_exporter", version.Info())
 
 	// Environmental sensor metrics
 	sdr, _ := collector.NewSDRExporter()
