@@ -14,7 +14,7 @@
       <service_fmri value='svc:/system/filesystem/local'/>
     </dependency>
 
-    <exec_method name='start' type='method' exec='/opt/custom/smf/bin/ipmi_exporter -listen-address ${server/listen} -ipmi-target ${ipmi/target} -ipmi-user ${ipmi/user} -ipmi-passwd ${ipmi/passwd} &amp;' timeout_seconds='30'/>
+    <exec_method name='start' type='method' exec='/opt/custom/smf/bin/ipmi_exporter -listen-address %{server/listen} -ipmi-target %{ipmi/target} -ipmi-user %{ipmi/user} -ipmi-passwd %{ipmi/passwd} &amp;' timeout_seconds='30'/>
     <exec_method name='restart' type='method' exec=':kill' timeout_seconds='60'/>
     <exec_method name='stop' type='method' exec=':kill' timeout_seconds='60'/>
     <exec_method name='refresh' type='method' exec=':kill -HUP' timeout_seconds='60'/>
